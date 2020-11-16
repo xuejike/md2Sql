@@ -3,6 +3,7 @@ package com.github.xuejike.md2sql;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.text.StrSpliter;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
@@ -15,10 +16,7 @@ import org.beetl.core.resource.StringTemplateResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author xuejike
@@ -47,7 +45,9 @@ public class MdMain {
                 lastTable = line.replaceAll("#","").replaceAll(" ","");
                 sb.append("-- ").append(line).append("\n");
             }
-            if (line.contains("---|---")){
+            List<String> resultFindAll = ReUtil.findAll("\\s*-+\\s*\\|\\s*-+\\s*", line, 0, new ArrayList<String>());
+
+            if ( resultFindAll.size() >0){
                 // 数据库表开始
                 i = parseTable(lines, i+1, lastTable, sb);
             }
@@ -70,10 +70,14 @@ public class MdMain {
                 return i;
             }
             List<String> list = StrSpliter.split(line, '|', true, false);
+            while (list.size()>0 && StrUtil.isEmpty(list.get(0))){
+                list.remove(0);
+            }
             if (list.size() < 4){
                 sb.append("\n").append(genSql(tableInfo)).append("\n");
                 return i;
             }
+
             TableColumn tableColumn = new TableColumn();
             tableColumn.setName(list.get(0));
             tableColumn.setType(list.get(1));
