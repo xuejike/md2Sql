@@ -1,0 +1,23 @@
+DROP TABLE `${table.name!}`;
+
+CREATE TABLE `${table.name!}`  (
+<%
+for(column in table.columnList){
+%>
+    `${column.name!}` ${column.type!} ${column.extMap['auto'] == null?'':' AUTO_INCREMENT '} <%
+    //对默认值处理
+     if (column.extMap['default'] != null){
+    %> DEFAULT ${column.extMap['default']}<%
+    }
+    //对空值进行空值
+    if(column.extMap['null'] == 'true'){
+     %> NULL <%
+    }else if(column.extMap['null'] == 'false'){
+    %> NOT NULL <%
+    }
+    %> COMMENT '${column.comment!}',
+<%
+}
+%>
+    PRIMARY KEY (`${table.key!}`)
+);
