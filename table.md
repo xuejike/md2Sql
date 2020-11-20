@@ -1,3 +1,137 @@
+[TOC]
+
+# 功能权限&数据权限详细设计文档
+
+## 1. 功能权限设计
+
+![image-20201116152316687](权限设计文档.assets/image-20201116152316687.png)
+
+
+## 2. 数据权限设计
+
+![image-20201116153147817](权限设计文档.assets/image-20201116153147817.png)
+
+
+## 3. 数据结构设计
+
+### 3.1 系统服务URL权限
+
+```json
+{
+    group:"用户管理",
+    name:"添加用户",
+	url:"/user/add",
+    appId:"srm",
+	dataAuthScript:"数据权限配置"
+}
+```
+
+
+
+### 3.2  租户服务URL权限
+
+```json
+{
+	tenantId:"",
+    appId:"",
+    group:"用户管理",
+    name:"添加用户",
+	url:"/user/add",
+	dataAuthScript:"数据权限配置"
+}
+```
+
+
+
+### 3.3  系统菜单权限
+
+
+
+```json
+{
+    id:"",
+    name:"",
+    url:"",
+    type:"菜单,页面,按钮"
+    pid:"",
+    appId:"",
+    serviceUrls:[
+    	""
+    ]
+}
+```
+
+
+
+### 3.4  租户自定义菜单权限
+
+
+
+```json
+{
+   	id:"",
+    tenantId:"",
+    name:"",
+    url:"",
+    type:"菜单,页面,按钮"
+    pid:"",
+    appId:"",
+    serviceUrls:[
+    	""
+    ]
+}
+```
+
+### 3.5 租户菜单权限
+
+```json
+{
+	id:"",
+	tenantId:"",
+	menuId:"",
+    name:"",
+    url:"",
+    type:"菜单,页面,按钮"
+    pid:"",
+    appId:"",
+    serviceUrls:[
+    	""
+    ]
+}
+```
+
+
+
+### 3.6 用户菜单权限
+
+```json
+{
+	id:"",
+	tenantId:"",
+	menuId:"",
+	userId:"",
+	appId:"",
+    dataAuthScript:""
+}
+```
+
+
+
+### 3.7 用户服务URL权限
+
+```json
+{
+	id:"",
+	tenantId:"",
+    userId:"",
+    appId:"",
+    name:"",
+    url:"",
+    dataAuthScript:""
+}
+```
+
+
 
 ## 4. 数据库设计
 

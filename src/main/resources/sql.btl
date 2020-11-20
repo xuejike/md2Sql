@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `${table.name!}`;
+-- DROP TABLE IF EXISTS `${table.name!}`;
 
 CREATE TABLE `${table.name!}`  (
 <%
@@ -19,5 +19,14 @@ for(column in table.columnList){
 <%
 }
 %>
+<%
+for(column in table.columnList){
+    if(column.extMap['index'] != null){
+    %>
+    index `index_${table.name!}_${column.name!}` (`${column.name!}`),
+    <%
+    }
+}
+%>
     PRIMARY KEY (`${table.key!}`)
-);
+) COMMENT = '${table.comment!}';

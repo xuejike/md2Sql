@@ -39,9 +39,11 @@ public class MdMain {
         String[] lines = mdTable.replaceAll("\r","").split("\n");
         StringBuilder sb = new StringBuilder();
         String lastTable ="";
+        String titleLast = "";
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             if (line.startsWith("#")){
+                titleLast = lastTable;
                 lastTable = line.replaceAll("#","").replaceAll(" ","");
                 sb.append("-- ").append(line).append("\n");
             }
@@ -49,18 +51,19 @@ public class MdMain {
 
             if ( resultFindAll.size() >0){
                 // 数据库表开始
-                i = parseTable(lines, i+1, lastTable, sb);
+                i = parseTable(lines, i+1, lastTable,titleLast, sb);
             }
         }
 
         FileUtil.writeString(sb.toString(),new File(mdFile+".sql"),"utf8");
     }
 
-    public static int parseTable(String[] lines,Integer lineIndex,String tableLine,StringBuilder sb){
+    public static int parseTable(String[] lines,Integer lineIndex,String tableLine,String titleTable,StringBuilder sb){
         System.out.println("生成Table = "+tableLine);
         int i = lineIndex;
         TableInfo tableInfo = new TableInfo();
         tableInfo.setName(tableLine);
+        tableInfo.setComment(titleTable);
         tableInfo.setColumnList(new LinkedList<>());
         for (i = lineIndex; i < lines.length; i++) {
 
@@ -85,7 +88,7 @@ public class MdMain {
             List<String> extList = StrSpliter.split(extStr, ',', true, true);
             tableColumn.setExtMap(new HashMap<>());
             for (String ext : extList) {
-                List<String> extItem = StrSpliter.split(ext, ':', true, true);
+                List<String> extItem = StrSpliter.split(ext, '@', true, true);
                 if (extItem.size()>1){
                     tableColumn.getExtMap().put(extItem.get(0),extItem.get(1));
                 }else{
